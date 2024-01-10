@@ -2,6 +2,7 @@ import os
 import json
 from airflow.decorators import task
 import html
+import re
 
 @task()
 def transform():
@@ -18,7 +19,8 @@ def transform():
         if description:
             soup = BeautifulSoup(description, 'html.parser')
             text_content = soup.get_text(separator='\n\n', strip=True)
-            return text_content
+            clean_text = re.sub(r'<[^>]*>', '', text_content)
+            return clean_text
         return ""
 
     def clean_date(date_str):
